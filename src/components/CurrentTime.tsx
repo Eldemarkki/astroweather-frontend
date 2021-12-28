@@ -14,5 +14,5 @@ export const CurrentTime = () => {
     return stop;
   })
 
-  return <Text size="lg">{currentTime.toLocaleString()}</Text>
+  return <Text size="lg" style={{ whiteSpace: "nowrap" }}>{currentTime.toLocaleString()}</Text>
 }

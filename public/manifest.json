@@ -1,0 +1,6 @@
+{
+  "short_name": "Astroweather",
+  "name": "Astroweather",
+  "start_url": ".",
+  "display": "standalone"
+}

@@ -1,7 +1,8 @@
-import { Button, createStyles, Group, Space, Text, TextInput, Title } from '@mantine/core'
+import { Button, createStyles, Group, Space, Text, TextInput } from '@mantine/core'
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from 'react'
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { AstroLocation } from '../data/AstroLocation';
 
 const useStyles = createStyles(theme => ({
   container: {
@@ -10,8 +11,8 @@ const useStyles = createStyles(theme => ({
 }));
 
 interface NewLocationFormProps {
-  onSubmit: (name: string, longitudeLatitude: [number, number]) => void,
-  locations?: string[]
+  onSubmit: (newLocation: AstroLocation) => void,
+  locationNames?: string[]
 }
 
 export const NewLocationForm = (props: NewLocationFormProps) => {
@@ -70,7 +71,7 @@ export const NewLocationForm = (props: NewLocationFormProps) => {
   if (locationName.length === 0) {
     errors["locationName"] = "Location name must not be empty"
   }
-  if ((props.locations || []).includes(locationName)) {
+  if ((props.locationNames || []).includes(locationName)) {
     errors["locationName"] = "A location with that name already exists"
   }
 
@@ -81,7 +82,12 @@ export const NewLocationForm = (props: NewLocationFormProps) => {
       <div ref={mapContainer} className="map-container"></div>
       <Space />
       <Group position="right">
-        <Button disabled={Object.keys(errors).length !== 0} onClick={() => props.onSubmit(locationName, [marker[0], marker[1]])}>Create</Button>
+        <Button disabled={Object.keys(errors).length !== 0} onClick={() => props.onSubmit(
+          {
+            name: locationName,
+            location: { longitude: marker[0], latitude: marker[1] }
+          }
+        )}>Create</Button>
       </Group>
     </div>
   )

@@ -1,9 +1,12 @@
 import { createStyles, Group, Modal, Text, Title } from '@mantine/core';
 import { useDocumentTitle } from '@mantine/hooks';
-import { PlusIcon } from '@radix-ui/react-icons';
+import { HamburgerMenuIcon, PlusIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
+import { AstroLocation } from '../data/AstroLocation';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import { CurrentTime } from './CurrentTime';
 import { Dashboard } from './Dashboard';
+import { EditLocationsModal } from './EditLocationsModal';
 import { NewLocationForm } from './NewLocationForm';
 
 const useStyles = createStyles(theme => ({
@@ -58,16 +61,25 @@ const App = () => {
   // TODO: Sunrise/sunset, moonrise/moonset
   // TODO: Auroras, https://services.swpc.noaa.gov/json/ovation_aurora_latest.json
 
-  const [locations, setLocations] = useState(["Helsinki", "Stockholm", "Oslo", "London", "Berlin", "Paris", "Rome"])
-  const [weatherLocation, setWeatherLocation] = useState(locations[0]);
-  const [createNewLocationModalOpen, setCreateNewLocationModalOpen] = useState(false)
-  useDocumentTitle("Astroweather: " + weatherLocation);
+  const [locations, setLocations] = useLocalStorage<AstroLocation[]>("locations", [{
+    name: "Helsinki",
+    location: {
+      latitude: 60.161950104862655,
+      longitude: 24.951679653697312
+    }
+  }]);
 
-  const onCreateLocation = (name: string, longitudeLatitude: [number, number]) => {
-    if (!locations.includes(name)) {
-      setLocations([...locations, name])
+  const [astroLocation, setAstroLocation] = useState(locations[0]);
+  useDocumentTitle("Astroweather: " + astroLocation.name);
+
+  const [createNewLocationModalOpen, setCreateNewLocationModalOpen] = useState(false)
+  const [editLocationsModalOpen, setEditLocationsModalOpen] = useState(false)
+
+  const onCreateLocation = (newLocation: AstroLocation) => {
+    if (!locations.some(l => l.name === newLocation.name)) {
+      setLocations([...locations, newLocation])
       setCreateNewLocationModalOpen(false);
-      setWeatherLocation(name);
+      setAstroLocation(newLocation);
     }
   }
 
@@ -80,25 +92,36 @@ const App = () => {
         title={<Title order={2}>New location</Title>}
         size={800}
         overflow="inside">
-        <NewLocationForm locations={locations} onSubmit={onCreateLocation} />
+        <NewLocationForm locationNames={locations.map(l => l.name)} onSubmit={onCreateLocation} />
+      </Modal>
+      <Modal
+        opened={editLocationsModalOpen}
+        onClose={() => setEditLocationsModalOpen(false)}
+        title={<Title order={2}>Edit locations</Title>}
+        size={800}
+        overflow="inside">
+        <EditLocationsModal locations={locations} setLocations={setLocations} />
       </Modal>
       <div className={classes.tabContainer}>
         <div className={classes.tabSection}>
           {locations.map(loc => {
-            const classNames = classes.tab + (loc === weatherLocation ? " " + classes.selectedTab : "")
-            return <div key={loc} className={classNames} onClick={() => setWeatherLocation(loc)}><Text>{loc}</Text></div>
+            const classNames = classes.tab + (loc.name === astroLocation.name ? " " + classes.selectedTab : "")
+            return <div key={loc.name} className={classNames} onClick={() => setAstroLocation(loc)}><Text>{loc.name}</Text></div>
           })}
           <div className={classes.tab} onClick={() => setCreateNewLocationModalOpen(true)}>
             <PlusIcon color="white" />
+          </div>
+          <div className={classes.tab} onClick={() => setEditLocationsModalOpen(true)}>
+            <HamburgerMenuIcon color="white" />
           </div>
         </div>
       </div>
       <div className={classes.innerContainer}>
         <Group position="apart" mb={20} noWrap>
-          <Title order={1} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }} title={weatherLocation}>Astroweather: {weatherLocation}</Title>
+          <Title order={1} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }} title={astroLocation.name}>Astroweather: {astroLocation.name}</Title>
           <CurrentTime />
         </Group>
-        <Dashboard location={weatherLocation} />
+        <Dashboard location={astroLocation} />
       </div>
     </div>
   );

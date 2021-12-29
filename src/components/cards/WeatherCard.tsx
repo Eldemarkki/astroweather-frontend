@@ -2,7 +2,7 @@ import { Card, Group, Title } from '@mantine/core'
 import React, { FunctionComponent } from 'react'
 
 interface WeatherCardProps {
-  title: string
+  title: string,
 }
 
 export const WeatherCard: FunctionComponent<WeatherCardProps> = (props) => {

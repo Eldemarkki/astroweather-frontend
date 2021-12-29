@@ -1,21 +1,21 @@
 import { Group } from '@mantine/core'
 import React from 'react'
+import { AstroLocation } from '../data/AstroLocation';
 import { CloudCoverageCard } from './cards/CloudCoverageCard';
 import { LightPollutionCard } from './cards/LightPollutionCard';
 import { MoonPhaseCard } from './cards/MoonPhaseCard';
 import { TemperatureCard } from './cards/TemperatureCard';
 
 interface DashboardProps {
-  location: string
+  location: AstroLocation
 }
 
-export const Dashboard = (props: DashboardProps) => {
-  // TODO: Use props.location to fetch correct data for the cards
+export const Dashboard = ({ location: astroLocation }: DashboardProps) => {
   return (
-    <Group grow>
-      <CloudCoverageCard />
-      <TemperatureCard />
-      <LightPollutionCard />
+    <Group grow align="start">
+      <CloudCoverageCard location={astroLocation.location} />
+      <TemperatureCard location={astroLocation.location} />
+      <LightPollutionCard location={astroLocation.location} />
       <MoonPhaseCard />
     </Group>
   )

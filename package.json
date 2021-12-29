@@ -13,6 +13,7 @@
     "@types/node": "^16.11.17",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "axios": "^0.24.0",
     "date-fns": "^2.27.0",
     "mapbox-gl": "^2.6.1",
     "react": "^17.0.2",

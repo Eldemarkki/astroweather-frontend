@@ -23,7 +23,7 @@ export const CloudCoverageCard = ({ location }: CardProps) => {
 
   return (
     <WeatherCard title="Cloud coverage">
-      {success ? <span style={{ color: greenRed(value / 100) }}>{value}% ({text})</span> : <Text>{value}</Text>}
+      {success ? <Text sx={{ color: greenRed(value / 100) }}>{value}% ({text})</Text> : <Text>{value}</Text>}
     </WeatherCard>
   )
 }

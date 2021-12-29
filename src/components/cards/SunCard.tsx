@@ -8,9 +8,8 @@ export const SunCard = ({ location }: CardProps) => {
 
   // TODO: Fix leftpad if rise/set minutes have 1 digit
 
-  return (<WeatherCard title="Sun">
+  return <WeatherCard title="Sun">
     <Text color="yellow">Sunrise at {suntimes.sunrise.getHours()}:{suntimes.sunrise.getMinutes()}</Text>
     <Text color="yellow">Sunset at {suntimes.sunset.getHours()}:{suntimes.sunset.getMinutes()}</Text>
   </WeatherCard>
-  )
 }

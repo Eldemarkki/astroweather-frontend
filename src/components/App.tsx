@@ -2,6 +2,7 @@ import { createStyles, Group, Modal, Text, Title } from '@mantine/core';
 import { useDocumentTitle } from '@mantine/hooks';
 import { HamburgerMenuIcon, PlusIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
+import Particles from 'react-tsparticles';
 import { AstroLocation } from '../data/AstroLocation';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { CurrentTime } from './CurrentTime';
@@ -13,7 +14,7 @@ const useStyles = createStyles(theme => ({
   container: {
     display: "flex",
     minHeight: "100vh",
-    background: "linear-gradient(45deg, #2c5074 0%, rgba(30,54,78,1) 100%)",
+    background: "linear-gradient(45deg, #232a60 0%, rgb(20, 24, 60) 100%)",
     padding: "50px 100px",
     flexDirection: "column"
   },
@@ -23,12 +24,14 @@ const useStyles = createStyles(theme => ({
     padding: 30,
     display: "flex",
     flexGrow: 1,
-    flexDirection: "column"
+    flexDirection: "column",
+    zIndex: 10,
   },
   tabContainer: {
     display: "flex",
     gap: 20,
-    height: 40
+    height: 40,
+    zIndex: 10,
   },
   tabSection: {
     display: 'flex'
@@ -52,7 +55,6 @@ const useStyles = createStyles(theme => ({
     }
   },
   selectedTab: {
-    filter: "brightness(1.4)",
     backgroundColor: theme.fn.rgba("#000000", 0.55),
   }
 }))
@@ -86,6 +88,26 @@ const App = () => {
   const { classes } = useStyles();
   return (
     <div className={classes.container}>
+      <div style={{ zIndex: 5, opacity: 0.15 }} >
+        <Particles id="tsparticles" options={{
+          fpsLimit: 60,
+          particles: {
+            move: {
+              enable: true,
+              speed: 0.3,
+            },
+            number: {
+              value: 60,
+            },
+            size: {
+              value: {
+                min: 3,
+                max: 6
+              }
+            }
+          }
+        }} />
+      </div>
       <Modal
         opened={createNewLocationModalOpen}
         onClose={() => setCreateNewLocationModalOpen(false)}

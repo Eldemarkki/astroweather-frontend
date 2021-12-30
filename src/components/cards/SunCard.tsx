@@ -19,7 +19,7 @@ export const SunCard = ({ location }: CardProps) => {
     <Text color="yellow">Sunrise at {format(suntimes.sunrise, "H:mm")}</Text>
     <Text color="yellow">Sunset at {format(suntimes.sunset, "H:mm")}</Text>
     <Center sx={{ width: "100%" }}>
-      <div style={{ maxWidth: "180px", aspectRatio: "1" }}>
+      <div style={{ width: "180px", aspectRatio: "1" }}>
         <FunctionDiagram
           progress={progress}
           showHorizontalLine

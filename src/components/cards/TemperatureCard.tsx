@@ -13,8 +13,8 @@ export const TemperatureCard = ({ location }: CardProps) => {
   return (
     <WeatherCard title="Temperature">
       {success ? <div>
-        <Text color="blue">{value.currentTemperature}°C</Text>
-        <Text color="blue">Feels like {value.feelsLike}°C</Text>
+        <Text color="blue">{value.currentTemperature.toFixed(1)}°C</Text>
+        <Text color="blue">Feels like {value.feelsLike.toFixed(1)}°C</Text>
       </div> : <Text>{value}</Text>}
     </WeatherCard>
   )

@@ -14,7 +14,7 @@ interface LightPollutionResponse {
 export const LightPollutionCard = ({ location }: LightPollutionCardProps) => {
   // TODO: Implement color scale, and show Bortle class
 
-  const { value, success } = useParseAstroStats<LightPollutionResponse>("/lightpollution", location, data => `Magnitude: ${data.intensityIndex}`);
+  const { value } = useParseAstroStats<LightPollutionResponse>("/lightpollution", location, data => `Magnitude: ${data.intensityIndex}`);
 
   return (
     <WeatherCard title="Light pollution">

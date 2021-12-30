@@ -26,6 +26,7 @@ const useStyles = createStyles(theme => ({
     flexGrow: 1,
     flexDirection: "column",
     zIndex: 10,
+    marginBottom: 5
   },
   tabContainer: {
     display: "flex",
@@ -60,7 +61,6 @@ const useStyles = createStyles(theme => ({
 }))
 
 const App = () => {
-  // TODO: Sunrise/sunset, moonrise/moonset
   // TODO: Auroras, https://services.swpc.noaa.gov/json/ovation_aurora_latest.json
 
   const [locations, setLocations] = useLocalStorage<AstroLocation[]>("locations", [{
@@ -97,7 +97,7 @@ const App = () => {
               speed: 0.3,
             },
             number: {
-              value: 60,
+              value: 30,
             },
             size: {
               value: {

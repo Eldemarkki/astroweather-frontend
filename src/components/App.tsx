@@ -122,7 +122,7 @@ const App = () => {
         title={<Title order={2}>Edit locations</Title>}
         size={800}
         overflow="inside">
-        <EditLocationsModal locations={locations} setLocations={setLocations} />
+        <EditLocationsModal locations={locations} setLocations={setLocations} setActiveLocation={setAstroLocation}/>
       </Modal>
       <div className={classes.tabContainer}>
         <div className={classes.tabSection}>

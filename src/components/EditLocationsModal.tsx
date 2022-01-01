@@ -1,22 +1,51 @@
-import { List, ListItem } from '@mantine/core'
-import React from 'react'
+import { Button, createStyles, Group, Text } from '@mantine/core'
 import { AstroLocation } from '../data/AstroLocation'
 import { latlonToDms } from '../utils/latlonFormat'
 
 interface EditLocationsModalProps {
-  locations: AstroLocation[],
+  locations: AstroLocation[]
   setLocations: (newLocations: AstroLocation[]) => void
+  setActiveLocation: (newActiveLocation: AstroLocation) => void
 }
 
-export const EditLocationsModal = ({ locations, setLocations }: EditLocationsModalProps) => {
-  // TODO: Implement editing, deleting and reordering
+interface LocationEntryProps {
+  location: AstroLocation
+  onDelete: () => void
+  canDelete: boolean
+}
+
+const useStyles = createStyles(theme => ({
+  listContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 15
+  }
+}))
+
+const LocationEntry = ({location, onDelete, canDelete}: LocationEntryProps) => {
+  return <Group position="apart">
+    <Text>{location.name} ({latlonToDms(location.location)})</Text>
+    <Button onClick={onDelete} color="red" disabled={!canDelete}>Delete</Button>
+  </Group>
+}
+
+export const EditLocationsModal = ({ locations, setLocations, setActiveLocation }: EditLocationsModalProps) => {
+  // TODO: Implement editing and reordering
+  const { classes } = useStyles();
+
   return (
-    <div>
-      <List>
-        {locations.map(location => (<ListItem key={location.name}>
-          {location.name} ({latlonToDms(location.location)})
-        </ListItem>))}
-      </List>
+    <div className={classes.listContainer}>
+      {locations.map((location, index) => (
+        <LocationEntry 
+          location={location} 
+          onDelete={() => {
+            if (locations.length !== 1) {
+              setActiveLocation(locations[index === 0 ? index + 1 : index - 1])
+              setLocations(locations.filter((_,i) => index !== i))
+            }}} 
+          key={location.name} 
+          canDelete={locations.length !== 1}/>)
+      )}
     </div>
   )
 }

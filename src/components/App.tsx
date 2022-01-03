@@ -26,13 +26,16 @@ const useStyles = createStyles(theme => ({
     flexGrow: 1,
     flexDirection: "column",
     zIndex: 10,
-    marginBottom: 5
+    marginBottom: 5,
+    backdropFilter: "blur(3px)",
   },
   tabContainer: {
     display: "flex",
     gap: 20,
     height: 40,
     zIndex: 10,
+    backdropFilter: "blur(3px)",
+    width: "fit-content",
   },
   tabSection: {
     display: 'flex'

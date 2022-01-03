@@ -8,18 +8,18 @@ interface LightPollutionCardProps {
 }
 
 interface LightPollutionResponse {
-  intensityIndex: number;
+  totalBrightness: number;
+  skyMagnitude: number
+  bortleClass: number
 }
 
 export const LightPollutionCard = ({ location }: LightPollutionCardProps) => {
-  // TODO: Implement color scale, and show Bortle class
-
-  const { value } = useParseAstroStats<LightPollutionResponse>("/lightpollution", location, data => `Magnitude: ${data.intensityIndex}`);
-
-  return (
-    <WeatherCard title="Light pollution">
-      <Text>{value}</Text>
-      <Anchor target="_blank" href={`https://www.lightpollutionmap.info/#zoom=12&lat=${location.latitude}&lon=${location.longitude}&layers=B0FFFFFFFTFFFFFFFFFF`}>Open in lightpollutionmap.info</Anchor>
-    </WeatherCard >
-  )
+  const { value, success } = useParseAstroStats<LightPollutionResponse>("/lightpollution", location, data => data);
+  return <WeatherCard title="Light pollution">
+    {success ? <div>
+      <Text>Bortle class: {value.bortleClass}</Text>
+      <Text>Magnitude (mag/arcsec²): {value.skyMagnitude.toFixed(2)}</Text>
+    </div> : <Text>Couldn't load light pollution data</Text>}
+    <Anchor target="_blank" href={`https://www.lightpollutionmap.info/#zoom=12&lat=${location.latitude}&lon=${location.longitude}&layers=B0FFFFFFFTFFFFFFFFFF`}>Open in lightpollutionmap.info</Anchor>
+  </WeatherCard >
 }

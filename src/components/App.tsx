@@ -74,8 +74,10 @@ const App = () => {
     }
   }]);
 
-  const [astroLocation, setAstroLocation] = useState(locations[0]);
-  useDocumentTitle("Astroweather: " + astroLocation.name);
+  const [activeAstroLocationIndex, setActiveAstroLocationIndex] = useState<number>(0);
+  const activeAstroLocation = locations[activeAstroLocationIndex];
+
+  useDocumentTitle("Astroweather: " + activeAstroLocation.name);
 
   const [createNewLocationModalOpen, setCreateNewLocationModalOpen] = useState(false)
   const [editLocationsModalOpen, setEditLocationsModalOpen] = useState(false)
@@ -84,7 +86,7 @@ const App = () => {
     if (!locations.some(l => l.name === newLocation.name)) {
       setLocations([...locations, newLocation])
       setCreateNewLocationModalOpen(false);
-      setAstroLocation(newLocation);
+      setActiveAstroLocationIndex(locations.length - 1);
     }
   }
 
@@ -125,13 +127,13 @@ const App = () => {
         title={<Title order={2}>Edit locations</Title>}
         size={800}
         overflow="inside">
-        <EditLocationsModal locations={locations} setLocations={setLocations} setActiveLocation={setAstroLocation}/>
+        <EditLocationsModal locations={locations} setLocations={setLocations} activeLocationIndex={activeAstroLocationIndex} setActiveLocationIndex={setActiveAstroLocationIndex} />
       </Modal>
       <div className={classes.tabContainer}>
         <div className={classes.tabSection}>
-          {locations.map(loc => {
-            const classNames = classes.tab + (loc.name === astroLocation.name ? " " + classes.selectedTab : "")
-            return <div key={loc.name} className={classNames} onClick={() => setAstroLocation(loc)}><Text>{loc.name}</Text></div>
+          {locations.map((loc, index) => {
+            const classNames = classes.tab + (loc.name === activeAstroLocation.name ? " " + classes.selectedTab : "")
+            return <div key={loc.name} className={classNames} onClick={() => setActiveAstroLocationIndex(index)}><Text>{loc.name}</Text></div>
           })}
           <div className={classes.tab} onClick={() => setCreateNewLocationModalOpen(true)}>
             <PlusIcon color="white" />
@@ -143,10 +145,10 @@ const App = () => {
       </div>
       <div className={classes.innerContainer}>
         <Group position="apart" mb={20} noWrap>
-          <Title order={1} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }} title={astroLocation.name}>Astroweather: {astroLocation.name}</Title>
+          <Title order={1} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }} title={activeAstroLocation.name}>Astroweather: {activeAstroLocation.name}</Title>
           <CurrentTime />
         </Group>
-        <Dashboard location={astroLocation} />
+        <Dashboard location={activeAstroLocation} />
       </div>
     </div>
   );

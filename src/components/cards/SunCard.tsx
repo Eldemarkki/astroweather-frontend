@@ -6,6 +6,8 @@ import { CardProps } from './CardProps';
 import { WeatherCard } from './WeatherCard'
 import SunCalc from "suncalc";
 
+const isValidDate = (date: unknown) => date instanceof Date && !isNaN(date.valueOf())
+
 export const SunCard = ({ location }: CardProps) => {
   const suntimes = SunCalc.getTimes(new Date(), location.latitude, location.longitude);
   const progress = remap(startOfToday().getTime(), endOfToday().getTime(), 0, 1, new Date().getTime());
@@ -16,16 +18,18 @@ export const SunCard = ({ location }: CardProps) => {
   const sunsetY = calculateY(remap(startOfToday().getTime(), endOfToday().getTime(), 0, 1, suntimes.sunset.getTime()))
 
   return <WeatherCard title="Sun">
-    <Text color="yellow">Sunrise at {format(suntimes.sunrise, "H:mm")}</Text>
-    <Text color="yellow">Sunset at {format(suntimes.sunset, "H:mm")}</Text>
-    <Center sx={{ width: "100%" }}>
-      <div style={{ width: "180px", aspectRatio: "1" }}>
-        <FunctionDiagram
-          progress={progress}
-          showHorizontalLine
-          horizontalLineY={(sunsetY + sunriseY) / 2}
-          calculateY={calculateY} />
-      </div>
-    </Center>
+    {(isValidDate(suntimes.sunrise) && isValidDate(suntimes.sunset)) ? <div>
+      <Text color="yellow">Sunrise at {format(suntimes.sunrise, "H:mm")}</Text>
+      <Text color="yellow">Sunset at {format(suntimes.sunset, "H:mm")}</Text>
+      <Center sx={{ width: "100%" }}>
+        <div style={{ width: "180px", aspectRatio: "1" }}>
+          <FunctionDiagram
+            progress={progress}
+            showHorizontalLine
+            horizontalLineY={(sunsetY + sunriseY) / 2}
+            calculateY={calculateY} />
+        </div>
+      </Center>
+    </div> : <Text>Couldn't calculate sunrise and sunset times</Text>}
   </WeatherCard>
 }

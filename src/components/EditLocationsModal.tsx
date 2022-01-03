@@ -7,7 +7,8 @@ import { EditAstroLocationModal } from './EditAstroLocationModal'
 interface EditLocationsModalProps {
   locations: AstroLocation[]
   setLocations: (newLocations: AstroLocation[]) => void
-  setActiveLocation: (newActiveLocation: AstroLocation) => void
+  activeLocationIndex: number
+  setActiveLocationIndex: (newActiveLocationIndex: number) => void
 }
 
 interface LocationEntryProps {
@@ -35,7 +36,7 @@ const LocationEntry = ({ location, onDelete, onEdit, canDelete }: LocationEntryP
   </Group>
 }
 
-export const EditLocationsModal = ({ locations, setLocations, setActiveLocation }: EditLocationsModalProps) => {
+export const EditLocationsModal = ({ locations, setLocations, activeLocationIndex, setActiveLocationIndex }: EditLocationsModalProps) => {
   // TODO: Implement reordering
   const { classes } = useStyles();
   const [editingLocation, setEditingLocation] = useState<AstroLocation | undefined>(undefined)
@@ -58,12 +59,29 @@ export const EditLocationsModal = ({ locations, setLocations, setActiveLocation 
             location={location}
             onDelete={() => {
               if (locations.length !== 1) {
-                setActiveLocation(locations[index === 0 ? index + 1 : index - 1])
-                setLocations(locations.filter((_,i) => index !== i))
-              }}}
+                let newIndex = -1
+                if (index < activeLocationIndex) {
+                  newIndex = activeLocationIndex - 1
+                }
+                else if (index === activeLocationIndex) {
+                  if (index === locations.length - 1) {
+                    newIndex = activeLocationIndex - 1
+                  }
+                  else {
+                    newIndex = index
+                  }
+                }
+                else { // index > activeLocationIndex
+                  newIndex = activeLocationIndex;
+                }
+
+                setActiveLocationIndex(newIndex)
+                setLocations(locations.filter((_, i) => index !== i))
+              }
+            }}
             onEdit={() => setEditingLocation({ ...location })}
             key={location.name}
-            canDelete={locations.length !== 1}/>)
+            canDelete={locations.length !== 1} />)
         )}
       </div>
     </div>

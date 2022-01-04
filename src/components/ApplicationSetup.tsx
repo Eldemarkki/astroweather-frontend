@@ -3,6 +3,8 @@ import React from 'react'
 import App from './App'
 import mapboxgl from 'mapbox-gl';
 import axios from 'axios';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || "";
 axios.defaults.baseURL = process.env.REACT_APP_API_URL || "";
@@ -16,7 +18,9 @@ export const ApplicationSetup = () => {
         backgroundHue: 233
       }
     }}>
-      <App />
+      <DndProvider backend={HTML5Backend}>
+        <App />
+      </DndProvider>
     </MantineProvider>
   )
 }

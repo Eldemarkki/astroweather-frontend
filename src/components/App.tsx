@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Particles from 'react-tsparticles';
 import { AstroLocation } from '../data/AstroLocation';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useMantineModal } from '../hooks/useMantineModal';
 import { CurrentTime } from './CurrentTime';
 import { Dashboard } from './Dashboard';
 import { EditLocationsModal } from './EditLocationsModal';
@@ -65,7 +66,8 @@ const useStyles = createStyles(theme => ({
 
 const App = () => {
   // TODO: Auroras, https://services.swpc.noaa.gov/json/ovation_aurora_latest.json
-
+  
+  // TODO: Make the location list reorderable also from the top-panel
   const [locations, setLocations] = useLocalStorage<AstroLocation[]>("locations", [{
     name: "Helsinki",
     location: {
@@ -79,13 +81,22 @@ const App = () => {
 
   useDocumentTitle("Astroweather: " + activeAstroLocation.name);
 
-  const [createNewLocationModalOpen, setCreateNewLocationModalOpen] = useState(false)
-  const [editLocationsModalOpen, setEditLocationsModalOpen] = useState(false)
-
+  const [newLocationModalProps, openNewLocationModal, closeNewLocationModal] = useMantineModal({
+    title: <Title order={2}>New location</Title>,
+    size: 800,
+    overflow: "inside"
+  })
+  
+  const [editLocationsModalProps, openEditLocationsModal] = useMantineModal({
+    title: <Title order={2}>Edit locations</Title>,
+    size: 800,
+    overflow: "inside"
+  })
+  
   const onCreateLocation = (newLocation: AstroLocation) => {
     if (!locations.some(l => l.name === newLocation.name)) {
       setLocations([...locations, newLocation])
-      setCreateNewLocationModalOpen(false);
+      closeNewLocationModal();
       setActiveAstroLocationIndex(locations.length - 1);
     }
   }
@@ -113,20 +124,10 @@ const App = () => {
           }
         }} />
       </div>
-      <Modal
-        opened={createNewLocationModalOpen}
-        onClose={() => setCreateNewLocationModalOpen(false)}
-        title={<Title order={2}>New location</Title>}
-        size={800}
-        overflow="inside">
+      <Modal {...newLocationModalProps}>
         <NewLocationForm locationNames={locations.map(l => l.name)} onSubmit={onCreateLocation} />
       </Modal>
-      <Modal
-        opened={editLocationsModalOpen}
-        onClose={() => setEditLocationsModalOpen(false)}
-        title={<Title order={2}>Edit locations</Title>}
-        size={800}
-        overflow="inside">
+      <Modal {...editLocationsModalProps}>
         <EditLocationsModal locations={locations} setLocations={setLocations} activeLocationIndex={activeAstroLocationIndex} setActiveLocationIndex={setActiveAstroLocationIndex} />
       </Modal>
       <div className={classes.tabContainer}>
@@ -135,10 +136,10 @@ const App = () => {
             const classNames = classes.tab + (loc.name === activeAstroLocation.name ? " " + classes.selectedTab : "")
             return <div key={loc.name} className={classNames} onClick={() => setActiveAstroLocationIndex(index)}><Text>{loc.name}</Text></div>
           })}
-          <div className={classes.tab} onClick={() => setCreateNewLocationModalOpen(true)}>
+          <div className={classes.tab} onClick={openNewLocationModal}>
             <PlusIcon color="white" />
           </div>
-          <div className={classes.tab} onClick={() => setEditLocationsModalOpen(true)}>
+          <div className={classes.tab} onClick={openEditLocationsModal}>
             <HamburgerMenuIcon color="white" />
           </div>
         </div>

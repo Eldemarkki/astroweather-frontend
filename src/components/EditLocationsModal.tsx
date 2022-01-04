@@ -1,4 +1,5 @@
-import { Button, createStyles, Group, List, ListItem, Modal, Text, Title } from '@mantine/core'
+import { Button, Center, createStyles, Group, List, ListItem, Modal, Text, Title } from '@mantine/core'
+import { DragHandleDots2Icon } from '@radix-ui/react-icons'
 import { useCallback, useRef, useState } from 'react'
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
 import { AstroLocation } from '../data/AstroLocation'
@@ -36,20 +37,20 @@ const useStyles = createStyles(theme => ({
 }))
 
 const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocation }: LocationEntryProps) => {
-  const ref = useRef<HTMLDivElement>(null)
+  const previewRef = useRef<HTMLDivElement>(null)
+  const dragRef = useRef<HTMLDivElement>(null)
 
   const [{ handlerId }, drop] = useDrop({
     accept: "LocationEntry",
     collect: (monitor) => ({ handlerId: monitor.getHandlerId() }),
     hover: (item: DragItem, monitor: DropTargetMonitor) => {
-      if (!ref.current) return;
-
+      if (!dragRef.current) return;
       const dragIndex = item.index;
       const hoverIndex = index
 
       if (dragIndex === hoverIndex) return
 
-      const hoverBoundingRect = ref.current?.getBoundingClientRect()
+      const hoverBoundingRect = dragRef.current?.getBoundingClientRect()
 
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
 
@@ -65,21 +66,29 @@ const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocat
     }
   })
 
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag, preview] = useDrag({
     type: "LocationEntry",
     item: () => ({ id: location.name, index }),
     collect: (monitor) => ({ isDragging: monitor.isDragging() })
   })
 
   const opacity = isDragging ? 0 : 1
-  drag(drop(ref))
 
-  return <div ref={ref} style={{ opacity }} data-handler-id={handlerId}>
-    <Group position="apart">
-      <Text size="lg">{location.name} ({latlonToDms(location.location)})</Text>
-      <Group>
-        <Button onClick={onEdit} color="blue">Edit</Button>
-        <Button onClick={onDelete} color="red" disabled={!canDelete}>Delete</Button>
+  drag(dragRef)
+  drop(preview(previewRef))
+
+
+  return <div ref={previewRef} style={{ opacity }} data-handler-id={handlerId}>
+    <Group noWrap>
+      <Center ref={dragRef}>
+        <DragHandleDots2Icon />
+      </Center>
+      <Group position="apart" sx={{ flexGrow: 1 }}>
+        <Text size="lg">{location.name} ({latlonToDms(location.location)})</Text>
+        <Group>
+          <Button onClick={onEdit} color="blue">Edit</Button>
+          <Button onClick={onDelete} color="red" disabled={!canDelete}>Delete</Button>
+        </Group>
       </Group>
     </Group>
   </div>

@@ -57,8 +57,9 @@ const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocat
       const clientOffset = monitor.getClientOffset()
       const hoverClientY = (clientOffset ? clientOffset.y : 0) - hoverBoundingRect.top
 
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
+      const dragBufferSize = 15
+      if (dragIndex < hoverIndex && hoverClientY + dragBufferSize < hoverMiddleY) return
+      if (dragIndex > hoverIndex && hoverClientY - dragBufferSize > hoverMiddleY) return
 
       moveLocation(dragIndex, hoverIndex)
 
@@ -80,8 +81,8 @@ const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocat
 
   return <div ref={previewRef} style={{ opacity }} data-handler-id={handlerId}>
     <Group noWrap>
-      <Center ref={dragRef}>
-        <DragHandleDots2Icon />
+      <Center ref={dragRef} sx={{ aspectRatio: "1/1", height: 25, cursor: "pointer" }}>
+        <DragHandleDots2Icon width={"100%"} height={"100%"} />
       </Center>
       <Group position="apart" sx={{ flexGrow: 1 }}>
         <Text size="lg">{location.name} ({latlonToDms(location.location)})</Text>
@@ -95,7 +96,6 @@ const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocat
 }
 
 export const EditLocationsModal = ({ locations, setLocations, activeLocationIndex, setActiveLocationIndex }: EditLocationsModalProps) => {
-  // TODO: Implement reordering
   const { classes } = useStyles();
   const [editingLocation, setEditingLocation] = useState<AstroLocation | undefined>(undefined)
 

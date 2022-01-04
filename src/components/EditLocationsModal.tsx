@@ -100,13 +100,37 @@ export const EditLocationsModal = ({ locations, setLocations, activeLocationInde
   const [editingLocation, setEditingLocation] = useState<AstroLocation | undefined>(undefined)
 
   const moveLocation = useCallback(
-    (dragIndex: number, hoverIndex: number) => {
-      const newLocations = locations.filter((_, i) => i !== dragIndex)
-      const finalLocations = newLocations.slice(0, hoverIndex).concat(locations[dragIndex]).concat(newLocations.slice(hoverIndex))
+    (sourceIndex: number, targetIndex: number) => {
+      const newLocations = locations.slice(0, sourceIndex).concat(...locations.slice(sourceIndex + 1))
+      const finalLocations = newLocations.slice(0, targetIndex).concat(locations[sourceIndex]).concat(newLocations.slice(targetIndex))
       setLocations(finalLocations)
 
-      // TODO: Make this more elegant (derive the new active location index from dragIndex and hoverIndex, instead of just searching based on names)
-      setActiveLocationIndex(finalLocations.findIndex(loc => loc.name === locations[activeLocationIndex].name))
+      let newActiveIndex = -1;
+      if (activeLocationIndex === sourceIndex) {
+        // User is moving the active location
+        newActiveIndex = targetIndex
+      }
+      else if ((activeLocationIndex > sourceIndex && activeLocationIndex > targetIndex) ||
+        (activeLocationIndex < sourceIndex && activeLocationIndex < targetIndex)) {
+        // Movement is fully above of fully below the active location
+        newActiveIndex = activeLocationIndex
+      }
+      else if (sourceIndex > targetIndex) {
+        // Movement is from below to above active location
+        newActiveIndex = activeLocationIndex + 1
+      }
+      else if (targetIndex > sourceIndex) {
+        // Movement is from above to below active location
+        newActiveIndex = activeLocationIndex - 1
+      }
+
+      // This will catch any bugs the code above might have
+      if (newActiveIndex === -1) {
+        console.error("New active index would've been -1, resetting it to 0.")
+        newActiveIndex = 0
+      }
+
+      setActiveLocationIndex(newActiveIndex)
     },
     [locations, setLocations, activeLocationIndex, setActiveLocationIndex],
   )

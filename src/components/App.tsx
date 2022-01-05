@@ -1,15 +1,15 @@
-import { createStyles, Group, Modal, Text, Title } from '@mantine/core';
-import { useDocumentTitle } from '@mantine/hooks';
-import { HamburgerMenuIcon, PlusIcon } from '@radix-ui/react-icons';
-import { useState } from 'react';
-import Particles from 'react-tsparticles';
-import { AstroLocation } from '../data/AstroLocation';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { useMantineModal } from '../hooks/useMantineModal';
-import { CurrentTime } from './CurrentTime';
-import { Dashboard } from './Dashboard';
-import { EditLocationsModal } from './EditLocationsModal';
-import { NewLocationForm } from './NewLocationForm';
+import { createStyles, Group, Modal, Text, Title } from "@mantine/core";
+import { useDocumentTitle } from "@mantine/hooks";
+import { HamburgerMenuIcon, PlusIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import Particles from "react-tsparticles";
+import { AstroLocation } from "../data/AstroLocation";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useMantineModal } from "../hooks/useMantineModal";
+import { CurrentTime } from "./CurrentTime";
+import { Dashboard } from "./Dashboard";
+import { EditLocationsModal } from "./EditLocationsModal";
+import { NewLocationForm } from "./NewLocationForm";
 
 const useStyles = createStyles(theme => ({
   container: {
@@ -39,7 +39,7 @@ const useStyles = createStyles(theme => ({
     width: "fit-content",
   },
   tabSection: {
-    display: 'flex'
+    display: "flex"
   },
   tab: {
     backgroundColor: theme.fn.rgba("#333333", 0.55),
@@ -62,7 +62,7 @@ const useStyles = createStyles(theme => ({
   selectedTab: {
     backgroundColor: theme.fn.rgba("#000000", 0.55),
   }
-}))
+}));
 
 const App = () => {
   // TODO: Auroras, https://services.swpc.noaa.gov/json/ovation_aurora_latest.json
@@ -85,21 +85,21 @@ const App = () => {
     title: <Title order={2}>New location</Title>,
     size: 800,
     overflow: "inside"
-  })
+  });
   
   const [editLocationsModalProps, openEditLocationsModal] = useMantineModal({
     title: <Title order={2}>Edit locations</Title>,
     size: 800,
     overflow: "inside"
-  })
+  });
   
   const onCreateLocation = (newLocation: AstroLocation) => {
     if (!locations.some(l => l.name === newLocation.name)) {
-      setLocations([...locations, newLocation])
+      setLocations([...locations, newLocation]);
       closeNewLocationModal();
       setActiveAstroLocationIndex(locations.length - 1);
     }
-  }
+  };
 
   const { classes } = useStyles();
   return (
@@ -133,8 +133,8 @@ const App = () => {
       <div className={classes.tabContainer}>
         <div className={classes.tabSection}>
           {locations.map((loc, index) => {
-            const classNames = classes.tab + (loc.name === activeAstroLocation.name ? " " + classes.selectedTab : "")
-            return <div key={loc.name} className={classNames} onClick={() => setActiveAstroLocationIndex(index)}><Text>{loc.name}</Text></div>
+            const classNames = classes.tab + (loc.name === activeAstroLocation.name ? " " + classes.selectedTab : "");
+            return <div key={loc.name} className={classNames} onClick={() => setActiveAstroLocationIndex(index)}><Text>{loc.name}</Text></div>;
           })}
           <div className={classes.tab} onClick={openNewLocationModal}>
             <PlusIcon color="white" />
@@ -153,6 +153,6 @@ const App = () => {
       </div>
     </div>
   );
-}
+};
 
 export default App;

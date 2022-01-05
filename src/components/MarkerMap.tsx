@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react'
-import { LatitudeLongitude } from '../data/LatitudeLongitude'
-import 'mapbox-gl/dist/mapbox-gl.css';
-import mapboxgl from 'mapbox-gl';
+import { useEffect, useRef } from "react";
+import { LatitudeLongitude } from "../data/LatitudeLongitude";
+import "mapbox-gl/dist/mapbox-gl.css";
+import mapboxgl from "mapbox-gl";
 
 interface MarkerMapProps {
   initialMarkerPosition?: LatitudeLongitude
@@ -16,32 +16,33 @@ export const MarkerMap = ({
   initialZoomLevel = 1,
   onMarkerMove
 }: MarkerMapProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapContainer = useRef<any>(null);
 
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v11',
+      style: "mapbox://styles/mapbox/streets-v11",
       center: [initialMapPosition.longitude, initialMapPosition.latitude],
       zoom: initialZoomLevel
     });
 
     const markerElement = document.createElement("div");
-    markerElement.className = "marker"
-    const marker = new mapboxgl.Marker(markerElement)
-    marker.setLngLat([initialMarkerPosition.longitude, initialMarkerPosition.latitude]).addTo(map)
+    markerElement.className = "marker";
+    const marker = new mapboxgl.Marker(markerElement);
+    marker.setLngLat([initialMarkerPosition.longitude, initialMarkerPosition.latitude]).addTo(map);
 
-    map.on('load', m => m.target.resize());
+    map.on("load", m => m.target.resize());
 
     map.on("click", (e) => {
       const newPos = {
         longitude: e.lngLat.lng,
         latitude: e.lngLat.lat
-      }
+      };
 
-      marker.setLngLat([newPos.longitude, newPos.latitude])
-      if (onMarkerMove) onMarkerMove(newPos)
-    })
+      marker.setLngLat([newPos.longitude, newPos.latitude]);
+      if (onMarkerMove) onMarkerMove(newPos);
+    });
   }, [
     initialMapPosition.latitude,
     initialMapPosition.longitude,
@@ -51,5 +52,5 @@ export const MarkerMap = ({
     onMarkerMove
   ]);
 
-  return <div ref={mapContainer} className="map-container"></div>
-}
+  return <div ref={mapContainer} className="map-container"></div>;
+};

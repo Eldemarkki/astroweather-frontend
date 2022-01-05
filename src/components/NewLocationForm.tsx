@@ -1,10 +1,10 @@
-import { Button, createStyles, Group, Space, Text, TextInput } from '@mantine/core'
-import { useState } from 'react'
-import { AstroLocation } from '../data/AstroLocation';
-import { LatitudeLongitude } from '../data/LatitudeLongitude';
-import { MarkerMap } from './MarkerMap';
+import { Button, createStyles, Group, Space, Text, TextInput } from "@mantine/core";
+import { useState } from "react";
+import { AstroLocation } from "../data/AstroLocation";
+import { LatitudeLongitude } from "../data/LatitudeLongitude";
+import { MarkerMap } from "./MarkerMap";
 
-const useStyles = createStyles(theme => ({
+const useStyles = createStyles(() => ({
   container: {
     overflow: "hidden"
   }
@@ -18,22 +18,22 @@ interface NewLocationFormProps {
 export const NewLocationForm = (props: NewLocationFormProps) => {
   const { classes } = useStyles();
 
-  const [locationName, setLocationName] = useState("")
+  const [locationName, setLocationName] = useState("");
 
-  const errors: { [key: string]: string } = {}
+  const errors: { [key: string]: string } = {};
   if (locationName.length === 0) {
-    errors["locationName"] = "Location name must not be empty"
+    errors["locationName"] = "Location name must not be empty";
   }
   if ((props.locationNames || []).includes(locationName)) {
-    errors["locationName"] = "A location with that name already exists"
+    errors["locationName"] = "A location with that name already exists";
   }
 
   const defaultMarkerPosition: LatitudeLongitude = {
     latitude: 50,
     longitude: 0
-  }
+  };
 
-  const [markerPosition, setMarkerPosition] = useState<LatitudeLongitude>(defaultMarkerPosition)
+  const [markerPosition, setMarkerPosition] = useState<LatitudeLongitude>(defaultMarkerPosition);
 
   return (
     <div className={classes.container}>
@@ -50,5 +50,5 @@ export const NewLocationForm = (props: NewLocationFormProps) => {
         )}>Create</Button>
       </Group>
     </div>
-  )
-}
+  );
+};

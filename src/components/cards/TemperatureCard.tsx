@@ -1,21 +1,19 @@
-import { Text } from '@mantine/core'
-import { useParseAstroStats } from '../../hooks/useAstroStats'
-import { CardProps } from './CardProps'
-import { WeatherCard } from './WeatherCard'
+import { Text } from "@mantine/core";
+import { CardProps } from "./CardProps";
+import { SmartWeatherCard } from "./WeatherCard";
 
-interface TemperatureProps {
+interface TemperatureResponse {
   currentTemperature: number;
   feelsLike: number;
 }
 
 export const TemperatureCard = ({ location }: CardProps) => {
-  const { value, success } = useParseAstroStats<TemperatureProps>("/temperature", location, data => data)
   return (
-    <WeatherCard title="Temperature">
-      {success ? <div>
-        <Text color="blue">{value.currentTemperature.toFixed(1)}°C</Text>
-        <Text color="blue">Feels like {value.feelsLike.toFixed(1)}°C</Text>
-      </div> : <Text>{value}</Text>}
-    </WeatherCard>
-  )
-}
+    <SmartWeatherCard<TemperatureResponse> title="Temperature" url="/temperature" location={location}>
+      {({ currentTemperature, feelsLike }) => <div>
+        <Text color="blue">{currentTemperature.toFixed(1)}°C</Text>
+        <Text color="blue">Feels like {feelsLike.toFixed(1)}°C</Text>
+      </div>}
+    </SmartWeatherCard>
+  );
+};

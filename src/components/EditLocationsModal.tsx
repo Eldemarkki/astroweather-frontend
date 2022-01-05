@@ -1,10 +1,10 @@
-import { Button, Center, createStyles, Group, List, ListItem, Modal, Text, Title } from '@mantine/core'
-import { DragHandleDots2Icon } from '@radix-ui/react-icons'
-import { useCallback, useRef, useState } from 'react'
-import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
-import { AstroLocation } from '../data/AstroLocation'
-import { latlonToDms } from '../utils/latlonFormat'
-import { EditAstroLocationModal } from './EditAstroLocationModal'
+import { Button, Center, createStyles, Group, List, ListItem, Modal, Text, Title } from "@mantine/core";
+import { DragHandleDots2Icon } from "@radix-ui/react-icons";
+import { useCallback, useRef, useState } from "react";
+import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
+import { AstroLocation } from "../data/AstroLocation";
+import { latlonToDms } from "../utils/latlonFormat";
+import { EditAstroLocationModal } from "./EditAstroLocationModal";
 
 interface EditLocationsModalProps {
   locations: AstroLocation[]
@@ -28,17 +28,17 @@ interface DragItem {
   type: string
 }
 
-const useStyles = createStyles(theme => ({
+const useStyles = createStyles(() => ({
   listContainer: {
     display: "flex",
     flexDirection: "column",
     gap: 15
   }
-}))
+}));
 
 const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocation }: LocationEntryProps) => {
-  const previewRef = useRef<HTMLDivElement>(null)
-  const dragRef = useRef<HTMLDivElement>(null)
+  const previewRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<HTMLDivElement>(null);
 
   const [{ handlerId }, drop] = useDrop({
     accept: "LocationEntry",
@@ -46,37 +46,37 @@ const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocat
     hover: (item: DragItem, monitor: DropTargetMonitor) => {
       if (!dragRef.current) return;
       const dragIndex = item.index;
-      const hoverIndex = index
+      const hoverIndex = index;
 
-      if (dragIndex === hoverIndex) return
+      if (dragIndex === hoverIndex) return;
 
-      const hoverBoundingRect = dragRef.current?.getBoundingClientRect()
+      const hoverBoundingRect = dragRef.current?.getBoundingClientRect();
 
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
-      const clientOffset = monitor.getClientOffset()
-      const hoverClientY = (clientOffset ? clientOffset.y : 0) - hoverBoundingRect.top
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = (clientOffset ? clientOffset.y : 0) - hoverBoundingRect.top;
 
-      const dragBufferSize = 15
-      if (dragIndex < hoverIndex && hoverClientY + dragBufferSize < hoverMiddleY) return
-      if (dragIndex > hoverIndex && hoverClientY - dragBufferSize > hoverMiddleY) return
+      const dragBufferSize = 15;
+      if (dragIndex < hoverIndex && hoverClientY + dragBufferSize < hoverMiddleY) return;
+      if (dragIndex > hoverIndex && hoverClientY - dragBufferSize > hoverMiddleY) return;
 
-      moveLocation(dragIndex, hoverIndex)
+      moveLocation(dragIndex, hoverIndex);
 
-      item.index = hoverIndex
+      item.index = hoverIndex;
     }
-  })
+  });
 
   const [{ isDragging }, drag, preview] = useDrag({
     type: "LocationEntry",
     item: () => ({ id: location.name, index }),
     collect: (monitor) => ({ isDragging: monitor.isDragging() })
-  })
+  });
 
-  const opacity = isDragging ? 0 : 1
+  const opacity = isDragging ? 0 : 1;
 
-  drag(dragRef)
-  drop(preview(previewRef))
+  drag(dragRef);
+  drop(preview(previewRef));
 
 
   return <div ref={previewRef} style={{ opacity }} data-handler-id={handlerId}>
@@ -92,48 +92,48 @@ const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocat
         </Group>
       </Group>
     </Group>
-  </div>
-}
+  </div>;
+};
 
 export const EditLocationsModal = ({ locations, setLocations, activeLocationIndex, setActiveLocationIndex }: EditLocationsModalProps) => {
   const { classes } = useStyles();
-  const [editingLocation, setEditingLocation] = useState<AstroLocation | undefined>(undefined)
+  const [editingLocation, setEditingLocation] = useState<AstroLocation | undefined>(undefined);
 
   const moveLocation = useCallback(
     (sourceIndex: number, targetIndex: number) => {
-      const newLocations = locations.slice(0, sourceIndex).concat(...locations.slice(sourceIndex + 1))
-      const finalLocations = newLocations.slice(0, targetIndex).concat(locations[sourceIndex]).concat(newLocations.slice(targetIndex))
-      setLocations(finalLocations)
+      const newLocations = locations.slice(0, sourceIndex).concat(...locations.slice(sourceIndex + 1));
+      const finalLocations = newLocations.slice(0, targetIndex).concat(locations[sourceIndex]).concat(newLocations.slice(targetIndex));
+      setLocations(finalLocations);
 
       let newActiveIndex = -1;
       if (activeLocationIndex === sourceIndex) {
         // User is moving the active location
-        newActiveIndex = targetIndex
+        newActiveIndex = targetIndex;
       }
       else if ((activeLocationIndex > sourceIndex && activeLocationIndex > targetIndex) ||
         (activeLocationIndex < sourceIndex && activeLocationIndex < targetIndex)) {
         // Movement is fully above of fully below the active location
-        newActiveIndex = activeLocationIndex
+        newActiveIndex = activeLocationIndex;
       }
       else if (sourceIndex > targetIndex) {
         // Movement is from below to above active location
-        newActiveIndex = activeLocationIndex + 1
+        newActiveIndex = activeLocationIndex + 1;
       }
       else if (targetIndex > sourceIndex) {
         // Movement is from above to below active location
-        newActiveIndex = activeLocationIndex - 1
+        newActiveIndex = activeLocationIndex - 1;
       }
 
       // This will catch any bugs the code above might have
       if (newActiveIndex === -1) {
-        console.error("New active index would've been -1, resetting it to 0.")
-        newActiveIndex = 0
+        console.error("New active index would've been -1, resetting it to 0.");
+        newActiveIndex = 0;
       }
 
-      setActiveLocationIndex(newActiveIndex)
+      setActiveLocationIndex(newActiveIndex);
     },
     [locations, setLocations, activeLocationIndex, setActiveLocationIndex],
-  )
+  );
 
   return (
     <div>
@@ -143,7 +143,7 @@ export const EditLocationsModal = ({ locations, setLocations, activeLocationInde
         size={800}
         title={<Title order={2}>Editing {editingLocation ? editingLocation.name : ""}</Title>}>
         {editingLocation && <EditAstroLocationModal locationNames={locations.map(l => l.name)} location={editingLocation} onSave={newLocation => {
-          setLocations(locations.map(l => l.name === editingLocation.name ? newLocation : l))
+          setLocations(locations.map(l => l.name === editingLocation.name ? newLocation : l));
           setEditingLocation(undefined);
         }} />}
       </Modal>
@@ -155,24 +155,24 @@ export const EditLocationsModal = ({ locations, setLocations, activeLocationInde
                 location={location}
                 onDelete={() => {
                   if (locations.length !== 1) {
-                    let newIndex = -1
+                    let newIndex = -1;
                     if (index < activeLocationIndex) {
-                      newIndex = activeLocationIndex - 1
+                      newIndex = activeLocationIndex - 1;
                     }
                     else if (index === activeLocationIndex) {
                       if (index === locations.length - 1) {
-                        newIndex = activeLocationIndex - 1
+                        newIndex = activeLocationIndex - 1;
                       }
                       else {
-                        newIndex = index
+                        newIndex = index;
                       }
                     }
                     else { // index > activeLocationIndex
                       newIndex = activeLocationIndex;
                     }
 
-                    setActiveLocationIndex(newIndex)
-                    setLocations(locations.filter((_, i) => index !== i))
+                    setActiveLocationIndex(newIndex);
+                    setLocations(locations.filter((_, i) => index !== i));
                   }
                 }}
                 onEdit={() => setEditingLocation({ ...location })}
@@ -185,5 +185,5 @@ export const EditLocationsModal = ({ locations, setLocations, activeLocationInde
         </List>
       </div>
     </div>
-  )
-}
+  );
+};

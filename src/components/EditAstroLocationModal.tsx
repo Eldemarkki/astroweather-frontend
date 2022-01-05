@@ -1,8 +1,8 @@
-import { Button, Group, Space, Text, TextInput, createStyles } from '@mantine/core';
-import { useState } from 'react';
-import { AstroLocation } from '../data/AstroLocation';
-import { LatitudeLongitude } from '../data/LatitudeLongitude';
-import { MarkerMap } from './MarkerMap';
+import { Button, Group, Space, Text, TextInput, createStyles } from "@mantine/core";
+import { useState } from "react";
+import { AstroLocation } from "../data/AstroLocation";
+import { LatitudeLongitude } from "../data/LatitudeLongitude";
+import { MarkerMap } from "./MarkerMap";
 
 interface EditingModalProps {
   location: AstroLocation;
@@ -10,11 +10,11 @@ interface EditingModalProps {
   onSave: (newLocation: AstroLocation) => void;
 }
 
-const useStyles = createStyles(theme => ({
+const useStyles = createStyles(() => ({
   editContainer: {
     overflow: "hidden"
   }
-}))
+}));
 
 export const EditAstroLocationModal = ({ location, locationNames, onSave }: EditingModalProps) => {
   const { classes } = useStyles();

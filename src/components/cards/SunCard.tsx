@@ -1,12 +1,12 @@
-import { Center, Text } from '@mantine/core';
-import { endOfToday, format, startOfToday } from 'date-fns';
-import { remap } from '../../utils/numberUtils';
-import { FunctionDiagram } from '../FunctionDiagram';
-import { CardProps } from './CardProps';
-import { WeatherCard } from './WeatherCard'
+import { Center, Text } from "@mantine/core";
+import { endOfToday, format, startOfToday } from "date-fns";
+import { remap } from "../../utils/numberUtils";
+import { FunctionDiagram } from "../FunctionDiagram";
+import { CardProps } from "./CardProps";
+import { WeatherCard } from "./WeatherCard";
 import SunCalc from "suncalc";
 
-const isValidDate = (date: unknown) => date instanceof Date && !isNaN(date.valueOf())
+const isValidDate = (date: unknown) => date instanceof Date && !isNaN(date.valueOf());
 
 export const SunCard = ({ location }: CardProps) => {
   const suntimes = SunCalc.getTimes(new Date(), location.latitude, location.longitude);
@@ -14,8 +14,8 @@ export const SunCard = ({ location }: CardProps) => {
 
   const calculateY = (x: number) => Math.sin(2 * Math.PI * x - Math.PI / 2) / 3.5 + 0.5;
 
-  const sunriseY = calculateY(remap(startOfToday().getTime(), endOfToday().getTime(), 0, 1, suntimes.sunrise.getTime()))
-  const sunsetY = calculateY(remap(startOfToday().getTime(), endOfToday().getTime(), 0, 1, suntimes.sunset.getTime()))
+  const sunriseY = calculateY(remap(startOfToday().getTime(), endOfToday().getTime(), 0, 1, suntimes.sunrise.getTime()));
+  const sunsetY = calculateY(remap(startOfToday().getTime(), endOfToday().getTime(), 0, 1, suntimes.sunset.getTime()));
 
   return <WeatherCard title="Sun">
     {(isValidDate(suntimes.sunrise) && isValidDate(suntimes.sunset)) ? <div>
@@ -30,6 +30,6 @@ export const SunCard = ({ location }: CardProps) => {
             calculateY={calculateY} />
         </div>
       </Center>
-    </div> : <Text>Couldn't calculate sunrise and sunset times</Text>}
-  </WeatherCard>
-}
+    </div> : <Text>Couldn&apos;t calculate sunrise and sunset times</Text>}
+  </WeatherCard>;
+};

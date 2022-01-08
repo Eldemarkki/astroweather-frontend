@@ -11,7 +11,7 @@ interface CloudinessResponse {
 export const CloudCoverageCard = ({ location }: CardProps) => {
   return <SmartWeatherCard<CloudinessResponse> title="Cloudiness" location={location} url="/cloudiness">
     {({ cloudiness }) => {
-      const text = selectLower({
+      const cloudinessDescription = selectLower({
         0: "None",
         10: "Very little",
         25: "Little",
@@ -21,7 +21,7 @@ export const CloudCoverageCard = ({ location }: CardProps) => {
       }, cloudiness);
 
       return (<Text sx={{ color: greenRed(cloudiness / 100) }}>
-        {cloudiness}% ({text})
+        {`${cloudiness}% (${cloudinessDescription})`}
       </Text>);
     }}
   </SmartWeatherCard>;

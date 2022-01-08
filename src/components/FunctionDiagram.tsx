@@ -31,8 +31,9 @@ export const FunctionDiagram = ({
     graphStrokeWidth: 2,
     horizontalLineColor: "white",
     horizontalLineThickness: 2
-  }
-}: FunctionDiagramProps) => {
+  },
+  ...props
+}: FunctionDiagramProps & React.SVGProps<SVGSVGElement>) => {
   const points: [number, number][] = [];
 
   for (let x = 0; x < pointCount; x++) {
@@ -48,7 +49,7 @@ export const FunctionDiagram = ({
   });
 
   return (
-    <svg style={{ width: "100%", height: "100%" }}>
+    <svg style={{ width: "100%", height: "100%" }} {...props}>
       {lines.map(line => {
         return <line
           key={`${line[0][0]},${line[0][1]},${line[1][0]},${line[1][1]}`}
@@ -61,7 +62,7 @@ export const FunctionDiagram = ({
             strokeWidth: styles.graphStrokeWidth
           }}></line>;
       })}
-      {showHorizontalLine && <line x1="0%" y1={`${100 - horizontalLineY * 100}%`} x2="100%" y2={`${100 - horizontalLineY * 100}%`} style={{stroke: styles.horizontalLineColor, strokeWidth: styles.horizontalLineThickness}}></line>}
+      {showHorizontalLine && <line x1="0%" y1={`${100 - horizontalLineY * 100}%`} x2="100%" y2={`${100 - horizontalLineY * 100}%`} style={{ stroke: styles.horizontalLineColor, strokeWidth: styles.horizontalLineThickness }}></line>}
       {showProgressCircle && (typeof (progress) === "number" ? [progress] : [...progress]).map(p => <circle key={p} cx={`${p * 100}%`} cy={`${(1 - calculateY(p)) * 100}%`} r={styles.circleRadius} style={{ fill: styles.circleColor }} />)}
     </svg >
   );

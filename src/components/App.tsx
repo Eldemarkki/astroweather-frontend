@@ -1,4 +1,4 @@
-import { createStyles, Group, Modal, Text, Title, useMantineColorScheme, useMantineTheme } from "@mantine/core";
+import { Anchor, createStyles, Group, Modal, Text, Title, useMantineColorScheme, useMantineTheme } from "@mantine/core";
 import { useDocumentTitle } from "@mantine/hooks";
 import { GearIcon, HamburgerMenuIcon, PlusIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
@@ -36,7 +36,7 @@ const useStyles = createStyles(theme => ({
     display: "flex",
     gap: 20,
     height: 40,
-    zIndex: 10,
+    zIndex: 15,
     backdropFilter: "blur(3px)",
     width: "fit-content",
   },
@@ -129,23 +129,25 @@ const App = () => {
         <SettingsModal />
       </Modal>
       <div className={classes.tabContainer}>
-        <div className={classes.tabSection}>
+        <div aria-label="List of your locations" role="tablist" className={classes.tabSection}>
           {locations.map((loc, index) => {
             const classNames = classes.tab + (loc.name === activeAstroLocation.name ? " " + classes.selectedTab : "");
-            return <div key={loc.name} className={classNames} onClick={() => setActiveAstroLocationIndex(index)}><Text>{loc.name}</Text></div>;
+            return <Text component="a" href="#" role="tab" key={loc.name} className={classNames} onClick={() => setActiveAstroLocationIndex(index)}>
+              {loc.name}
+            </Text>;
           })}
-          <div className={classes.tab} onClick={openNewLocationModal}>
-            <PlusIcon color={colorScheme === "light" ? theme.black : theme.colors.gray[0]} />
-          </div>
-          <div className={classes.tab} onClick={openEditLocationsModal}>
-            <HamburgerMenuIcon color={colorScheme === "light" ? theme.black : theme.colors.gray[0]} />
-          </div>
-          <div className={classes.tab} onClick={openSettingsModal}>
-            <GearIcon color={colorScheme === "light" ? theme.black : theme.colors.gray[0]} />
-          </div>
+          <Anchor href="#" role="tab" aria-label="Create new location" className={classes.tab} onClick={openNewLocationModal}>
+            <PlusIcon aria-label="Plus icon" color={colorScheme === "light" ? theme.black : theme.colors.gray[0]} />
+          </Anchor>
+          <Anchor href="#" role="tab" aria-label="Edit and reorder locations" className={classes.tab} onClick={openEditLocationsModal}>
+            <HamburgerMenuIcon aria-label="Three horizontal lines" color={colorScheme === "light" ? theme.black : theme.colors.gray[0]} />
+          </Anchor>
+          <Anchor href="#" role="tab" aria-label="Open settings" className={classes.tab} onClick={openSettingsModal}>
+            <GearIcon aria-label="Gear icon" color={colorScheme === "light" ? theme.black : theme.colors.gray[0]} />
+          </Anchor>
         </div>
       </div>
-      <div className={classes.innerContainer}>
+      <div role="tabpanel" className={classes.innerContainer}>
         <Group position="apart" mb={20} noWrap>
           <Title order={1} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }} title={activeAstroLocation.name}>Astroweather: {activeAstroLocation.name}</Title>
           <CurrentTime />

@@ -25,25 +25,26 @@ export const ApplicationSetup = () => {
             backgroundHue: backgroundHue
           }
         }}>
-          <div style={{ zIndex: 5, opacity: 0.15 }} >
-            <Particles id="tsparticles" options={{
-              fpsLimit: 60,
-              particles: {
-                move: {
-                  enable: true,
-                  speed: 0.3,
-                },
-                number: {
-                  value: 30,
-                },
-                size: {
-                  value: {
-                    min: 3,
-                    max: 6
+          <div aria-label="Particles floating in the background" style={{ zIndex: 5, opacity: 0.15 }} >
+            <Particles id="tsparticles"
+              options={{
+                fpsLimit: 60,
+                particles: {
+                  move: {
+                    enable: true,
+                    speed: 0.3,
+                  },
+                  number: {
+                    value: 30,
+                  },
+                  size: {
+                    value: {
+                      min: 3,
+                      max: 6
+                    }
                   }
                 }
-              }
-            }} />
+              }} />
           </div>
           <DndProvider backend={HTML5Backend}>
             <App />

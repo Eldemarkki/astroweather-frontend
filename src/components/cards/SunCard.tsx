@@ -27,10 +27,11 @@ export const SunCard = ({ location }: CardProps) => {
       <Center sx={{ width: "100%" }}>
         <div style={{ width: "180px", aspectRatio: "1" }}>
           <FunctionDiagram
+            aria-label="Diagram of sun position in the sky currently"
             progress={progress}
             showHorizontalLine
             horizontalLineY={(sunsetY + sunriseY) / 2}
-            calculateY={calculateY} 
+            calculateY={calculateY}
             styles={{
               circleColor: colorScheme === "light" ? theme.colors.gray[7] : theme.colors.gray[0],
               circleRadius: 8,

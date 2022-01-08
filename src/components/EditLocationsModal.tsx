@@ -1,5 +1,5 @@
-import { Button, Center, createStyles, Group, List, ListItem, Modal, Text, Title } from "@mantine/core";
-import { DragHandleDots2Icon } from "@radix-ui/react-icons";
+import { ActionIcon, Button, Center, createStyles, Group, List, ListItem, Modal, Text, Title } from "@mantine/core";
+import { ArrowDownIcon, ArrowUpIcon, DragHandleDots2Icon } from "@radix-ui/react-icons";
 import { useCallback, useRef, useState } from "react";
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { AstroLocation } from "../data/AstroLocation";
@@ -20,6 +20,7 @@ interface LocationEntryProps {
   canDelete: boolean
   index: number
   moveLocation: (dragIndex: number, hoverIndex: number) => void
+  locationCount: number
 }
 
 interface DragItem {
@@ -36,7 +37,7 @@ const useStyles = createStyles(() => ({
   }
 }));
 
-const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocation }: LocationEntryProps) => {
+const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocation, locationCount }: LocationEntryProps) => {
   const previewRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<HTMLDivElement>(null);
 
@@ -86,6 +87,12 @@ const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocat
       <Group position="apart" sx={{ flexGrow: 1 }}>
         <Text size="lg">{location.name} ({latlonToDms(location.location)})</Text>
         <Group>
+          <ActionIcon onClick={() => moveLocation(index, index - 1)} disabled={index === 0}>
+            <ArrowUpIcon />
+          </ActionIcon>
+          <ActionIcon onClick={() => moveLocation(index, index + 1)} disabled={index + 1 >= locationCount}>
+            <ArrowDownIcon />
+          </ActionIcon>
           <Button onClick={onEdit} color="blue">Edit</Button>
           <Button onClick={onDelete} color="red" disabled={!canDelete}>Delete</Button>
         </Group>
@@ -178,6 +185,7 @@ export const EditLocationsModal = ({ locations, setLocations, activeLocationInde
                 canDelete={locations.length !== 1}
                 index={index}
                 moveLocation={moveLocation}
+                locationCount={locations.length}
               />
             </ListItem>)
           )}

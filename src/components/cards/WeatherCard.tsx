@@ -1,4 +1,4 @@
-import { Card, Group, Text, Title } from "@mantine/core";
+import { Card, Text, Title } from "@mantine/core";
 import { ReactNode } from "react";
 import { FunctionComponent } from "react";
 import { LatitudeLongitude } from "../../data/LatitudeLongitude";
@@ -13,11 +13,9 @@ interface WeatherCardProps<T> {
 
 export const WeatherCard: FunctionComponent<Pick<WeatherCardProps<undefined>, "title">> = (props) => {
   return (
-    <Card>
-      <Group direction="column">
-        <Title order={2}>{props.title}</Title>
-        {props.children}
-      </Group>
+    <Card aria-label={`${props.title} card`} role="group">
+      <Title order={2}>{props.title}</Title>
+      {props.children}
     </Card>
   );
 };

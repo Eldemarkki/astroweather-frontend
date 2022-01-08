@@ -1,4 +1,4 @@
-import { Center, Text } from "@mantine/core";
+import { Center, Text, useMantineColorScheme, useMantineTheme } from "@mantine/core";
 import { endOfToday, format, startOfToday } from "date-fns";
 import { remap } from "../../utils/numberUtils";
 import { FunctionDiagram } from "../FunctionDiagram";
@@ -17,6 +17,9 @@ export const SunCard = ({ location }: CardProps) => {
   const sunriseY = calculateY(remap(startOfToday().getTime(), endOfToday().getTime(), 0, 1, suntimes.sunrise.getTime()));
   const sunsetY = calculateY(remap(startOfToday().getTime(), endOfToday().getTime(), 0, 1, suntimes.sunset.getTime()));
 
+  const { colorScheme } = useMantineColorScheme();
+  const theme = useMantineTheme();
+
   return <WeatherCard title="Sun">
     {(isValidDate(suntimes.sunrise) && isValidDate(suntimes.sunset)) ? <div>
       <Text color="yellow">Sunrise at {format(suntimes.sunrise, "H:mm")}</Text>
@@ -27,7 +30,16 @@ export const SunCard = ({ location }: CardProps) => {
             progress={progress}
             showHorizontalLine
             horizontalLineY={(sunsetY + sunriseY) / 2}
-            calculateY={calculateY} />
+            calculateY={calculateY} 
+            styles={{
+              circleColor: colorScheme === "light" ? theme.colors.gray[7] : theme.colors.gray[0],
+              circleRadius: 8,
+              graphColor: colorScheme === "light" ? theme.colors.gray[7] : theme.colors.gray[0],
+              graphStrokeWidth: 2,
+              horizontalLineColor: colorScheme === "light" ? theme.colors.gray[7] : theme.colors.gray[0],
+              horizontalLineThickness: 2
+            }}
+          />
         </div>
       </Center>
     </div> : <Text>Couldn&apos;t calculate sunrise and sunset times</Text>}

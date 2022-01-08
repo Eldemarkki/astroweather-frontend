@@ -9,7 +9,9 @@ export const useAstroStats = <T>(url: string, location: LatitudeLongitude) => {
 
   useEffect(() => {
     setLoading(true);
+    const source = axios.CancelToken.source();
     axios.get<T>(url, {
+      cancelToken: source.token,
       params: {
         lon: location.longitude,
         lat: location.latitude,
@@ -24,6 +26,8 @@ export const useAstroStats = <T>(url: string, location: LatitudeLongitude) => {
       setValue(undefined);
       setError("Could not load data");
     });
+
+    return source.cancel;
   }, [location.latitude, location.longitude, url]);
 
   return { value, error, loading };

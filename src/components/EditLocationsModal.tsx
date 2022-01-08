@@ -78,7 +78,6 @@ const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocat
   drag(dragRef);
   drop(preview(previewRef));
 
-
   return <div ref={previewRef} style={{ opacity }} data-handler-id={handlerId}>
     <Group noWrap>
       <Center ref={dragRef} sx={{ aspectRatio: "1/1", height: 25, cursor: "pointer" }}>

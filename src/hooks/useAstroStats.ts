@@ -20,14 +20,18 @@ export const useAstroStats = <T>(url: string, location: LatitudeLongitude) => {
       setLoading(false);
       setError(undefined);
       setValue(response.data);
-    }).catch((error) => {
-      console.log(error);
+    }).catch(() => {
       setLoading(false);
       setValue(undefined);
       setError("Could not load data");
     });
 
-    return source.cancel;
+    return () => {
+      source.cancel();
+      setLoading(false);
+      setValue(undefined);
+      setError("Loading data cancelled");
+    };
   }, [location.latitude, location.longitude, url]);
 
   return { value, error, loading };

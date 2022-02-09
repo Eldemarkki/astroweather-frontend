@@ -12,7 +12,7 @@ export const CurrentTime = () => {
   useEffect(() => {
     start();
     return stop;
-  });
+  }, []);
 
   return <Text aria-label="Current local time" component="p" size="lg" style={{ whiteSpace: "nowrap" }}>{currentTime.toLocaleString()}</Text>;
 };

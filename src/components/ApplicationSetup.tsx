@@ -5,6 +5,7 @@ import axios from "axios";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useEffect, useState } from "react";
@@ -38,6 +39,7 @@ export const ApplicationSetup = () => {
           }}>
           {isMounted && <div aria-label="Particles floating in the background" style={{ zIndex: 5, opacity: 0.15 }} >
             <Particles id="tsparticles"
+              init={loadFull}
               options={{
                 fpsLimit: 60,
                 particles: {

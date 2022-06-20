@@ -11,8 +11,8 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useEffect, useState } from "react";
 import { useLocalStorageValue } from "@mantine/hooks";
 
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || "";
-axios.defaults.baseURL = process.env.REACT_APP_API_URL || "";
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY || "";
+axios.defaults.baseURL = "/api";
 
 export const ApplicationSetup = () => {
   const [isMounted, setIsMounted] = useState(false);

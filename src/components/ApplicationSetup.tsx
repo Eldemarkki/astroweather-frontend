@@ -7,9 +7,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import { SettingsContext } from "../contexts/SettingsContext";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useEffect, useState } from "react";
-import { useLocalStorageValue } from "@mantine/hooks";
+import { useLocalStorage } from "@mantine/hooks";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY || "";
 axios.defaults.baseURL = "/api";
@@ -22,9 +21,9 @@ export const ApplicationSetup = () => {
     return () => setIsMounted(false);
   }, []);
 
-  const [colorScheme, setColorScheme] = useLocalStorageValue<ColorScheme>({ key: "astroweather-color-scheme", defaultValue: "dark" });
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({ key: "astroweather-color-scheme", defaultValue: "dark" });
 
-  const [backgroundHue, setBackgroundHue] = useLocalStorageValue<number>({ key: "astroweather-background-hue", defaultValue: 233 });
+  const [backgroundHue, setBackgroundHue] = useLocalStorage<number>({ key: "astroweather-background-hue", defaultValue: 233 });
 
   return (
     <SettingsContext.Provider value={{ backgroundHue, setBackgroundHue }}>

@@ -1,9 +1,8 @@
 import { Anchor, createStyles, Group, Modal, Text, Title, useMantineColorScheme, useMantineTheme } from "@mantine/core";
-import { useDocumentTitle } from "@mantine/hooks";
+import { useDocumentTitle, useLocalStorage } from "@mantine/hooks";
 import { GearIcon, HamburgerMenuIcon, PlusIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { AstroLocation } from "../data/AstroLocation";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useMantineModal } from "../hooks/useMantineModal";
 import { CurrentTime } from "./CurrentTime";
 import { Dashboard } from "./Dashboard";
@@ -74,13 +73,16 @@ const App = () => {
   // TODO: Auroras, https://services.swpc.noaa.gov/json/ovation_aurora_latest.json
 
   // TODO: Make the location list reorderable also from the top-panel
-  const [locations, setLocations] = useLocalStorage<AstroLocation[]>("locations", [{
-    name: "Helsinki",
-    location: {
-      latitude: 60.161950104862655,
-      longitude: 24.951679653697312
-    }
-  }]);
+  const [locations, setLocations] = useLocalStorage<AstroLocation[]>({
+    key: "locations",
+    defaultValue: [{
+      name: "Helsinki",
+      location: {
+        latitude: 60.161950104862655,
+        longitude: 24.951679653697312
+      }
+    }]
+  });
 
   const [activeAstroLocationIndex, setActiveAstroLocationIndex] = useState<number>(0);
   const activeAstroLocation = locations[activeAstroLocationIndex];

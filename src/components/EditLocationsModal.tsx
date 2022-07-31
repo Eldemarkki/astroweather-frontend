@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Center, createStyles, Group, List, ListItem, Modal, Text, Title } from "@mantine/core";
+import { ActionIcon, Button, Center, createStyles, Group, List, Modal, Text, Title } from "@mantine/core";
 import { ArrowDownIcon, ArrowUpIcon, DragHandleDots2Icon } from "@radix-ui/react-icons";
 import { useCallback, useRef, useState } from "react";
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
@@ -156,7 +156,7 @@ export const EditLocationsModal = ({ locations, setLocations, activeLocationInde
       <div className={classes.listContainer}>
         <List sx={{ listStyleType: "none" }} >
           {locations.map((location, index) => (
-            <ListItem key={location.name} sx={{ margin: "10px 0px" }}>
+            <List.Item key={location.name} sx={{ margin: "10px 0px" }}>
               <LocationEntry
                 location={location}
                 onDelete={() => {
@@ -187,7 +187,7 @@ export const EditLocationsModal = ({ locations, setLocations, activeLocationInde
                 moveLocation={moveLocation}
                 locationCount={locations.length}
               />
-            </ListItem>)
+            </List.Item>)
           )}
         </List>
       </div>

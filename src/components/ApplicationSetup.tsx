@@ -7,20 +7,12 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import { SettingsContext } from "../contexts/SettingsContext";
-import { useEffect, useState } from "react";
 import { useLocalStorage } from "@mantine/hooks";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY || "";
 axios.defaults.baseURL = "/api";
 
 export const ApplicationSetup = () => {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-    return () => setIsMounted(false);
-  }, []);
-
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({ key: "astroweather-color-scheme", defaultValue: "dark" });
 
   const [backgroundHue, setBackgroundHue] = useLocalStorage<number>({ key: "astroweather-background-hue", defaultValue: 233 });
@@ -36,7 +28,7 @@ export const ApplicationSetup = () => {
               backgroundHue: backgroundHue
             }
           }}>
-          {isMounted && <div aria-label="Particles floating in the background" style={{ zIndex: 5, opacity: 0.15 }} >
+          <div aria-label="Particles floating in the background" style={{ zIndex: 5, opacity: 0.15, position: "absolute" }} >
             <Particles id="tsparticles"
               init={loadFull}
               options={{
@@ -57,7 +49,7 @@ export const ApplicationSetup = () => {
                   }
                 }
               }} />
-          </div>}
+          </div>
           <DndProvider backend={HTML5Backend}>
             <App />
           </DndProvider>

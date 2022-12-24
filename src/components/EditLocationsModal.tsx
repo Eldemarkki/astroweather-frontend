@@ -79,8 +79,8 @@ const LocationEntry = ({ location, onDelete, onEdit, canDelete, index, moveLocat
   drag(dragRef);
   drop(preview(previewRef));
 
-  return <div ref={previewRef} style={{ opacity }} data-handler-id={handlerId}>
-    <Group noWrap>
+  return <div ref={previewRef} style={{ opacity, display: "flex", flexGrow: 1 }} data-handler-id={handlerId}>
+    <Group noWrap sx={{ flexGrow: 1 }}>
       <Center ref={dragRef} sx={{ aspectRatio: "1/1", height: 25, cursor: "pointer" }}>
         <DragHandleDots2Icon width={"100%"} height={"100%"} />
       </Center>
@@ -154,9 +154,9 @@ export const EditLocationsModal = ({ locations, setLocations, activeLocationInde
         }} />}
       </Modal>
       <div className={classes.listContainer}>
-        <List sx={{ listStyleType: "none" }} >
+        <ul style={{ listStyleType: "none", padding: 0 }} >
           {locations.map((location, index) => (
-            <List.Item key={location.name} sx={{ margin: "10px 0px" }}>
+            <li key={location.name} style={{ margin: "10px 0px", display: "flex", flexGrow: 1 }}>
               <LocationEntry
                 location={location}
                 onDelete={() => {
@@ -187,9 +187,9 @@ export const EditLocationsModal = ({ locations, setLocations, activeLocationInde
                 moveLocation={moveLocation}
                 locationCount={locations.length}
               />
-            </List.Item>)
+            </li>)
           )}
-        </List>
+        </ul>
       </div>
     </div>
   );
